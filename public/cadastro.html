@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Pessoa</title>
+    <link rel="stylesheet" href="stylesheets/cadastro.css">
+    <link rel="stylesheet" href="stylesheets/header.css">
+
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Usuários</a></li>
+                <li><a href="/cadastro">Cadastrar</a></li>
+                <li><a href="/atualizar">Atualizar Usuário</a></li>
+                <li><a href="/excluir">Excluir Usuário</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Cadastrar Pessoa</h1>
+        <form id="formCadastro">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" placeholder="Digite o nome" required>
+
+            <label for="idade">Idade:</label>
+            <input type="number" id="idade" name="idade" placeholder="Digite a idade" required>
+
+            <label for="cpfCadastro">CPF:</label>
+            <input type="text" id="cpfCadastro" name="cpfCadastro" placeholder="Digite o CPF" required>
+
+            <button type="button" onclick="enviarDados()">Cadastrar</button>
+        </form>
+    </div>
+
+    <script>
+        function enviarDados() {
+            const nome = document.getElementById('nome').value;
+            const idade = document.getElementById('idade').value;
+            const cpf = document.getElementById('cpfCadastro').value;
+
+            fetch('/api/pessoas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nome: nome, idade: idade, cpf: cpf })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Pessoa cadastrada com sucesso!');
+                    // Limpa os inputs do formulário
+                    document.getElementById('nome').value = '';
+                    document.getElementById('idade').value = '';
+                    document.getElementById('cpfCadastro').value = '';
+                })
+                .catch(error => {
+                    console.error('Erro ao cadastrar pessoa:', error);
+                    alert('Erro ao cadastrar pessoa. Tente novamente.');
+                });
+        }
+    </script>
+</body>
+
+</html>

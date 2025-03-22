@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pessoas</title>
+    <link rel="stylesheet" href="stylesheets/pessoas.css">
+    <link rel="stylesheet" href="stylesheets/header.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Usuários</a></li>
+                <li><a href="/cadastro">Cadastrar</a></li>
+                <li><a href="/atualizar">Atualizar Usuário</a></li>
+                <li><a href="/excluir">Excluir Usuário</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Lista de Pessoas</h1>
+        <table id="tabelaPessoas">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Idade</th>
+                    <th>CPF</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dados serão preenchidos aqui via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            carregarDados();
+        });
+
+        function carregarDados() {
+            fetch('/api/pessoas', {
+                method: 'GET'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const tabela = document.getElementById('tabelaPessoas').getElementsByTagName('tbody')[0];
+                    tabela.innerHTML = ''; // Limpa a tabela antes de preencher
+
+                    data.forEach(pessoa => {
+                        const linha = tabela.insertRow();
+                        linha.insertCell().textContent = pessoa.id;
+                        linha.insertCell().textContent = pessoa.nome;
+                        linha.insertCell().textContent = pessoa.idade;
+                        linha.insertCell().textContent = pessoa.cpf;
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar dados:', error);
+                    alert('Erro ao carregar dados. Tente novamente.');
+                });
+        }
+    </script>
+</body>
+
+</html>
